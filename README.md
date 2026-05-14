@@ -480,3 +480,123 @@ Run:
 bfs([[a]],g,Path).
 Output
 Path = [g,e,b,a]
+
+
+A* Search Algorithm in Prolog
+Aim
+
+To implement A* Search Algorithm using heuristic function in Prolog.
+
+Short Theory
+
+A* Search is an informed search algorithm.
+
+It uses:
+
+Actual cost → g(n)
+Heuristic cost → h(n)
+
+Formula used:
+
+f(n)=g(n)+h(n)
+
+Where:
+
+f(n) = total cost
+g(n) = path cost
+h(n) = heuristic value
+
+A* always selects the node with minimum total cost.
+
+Proper Prolog Code
+% Graph edges with costs
+edge(a,b,1).
+edge(a,c,4).
+edge(b,d,2).
+edge(c,d,1).
+edge(d,g,3).
+
+% Heuristic values
+h(a,7).
+h(b,6).
+h(c,2).
+h(d,1).
+h(g,0).
+
+% A* Search
+astar(Start,Goal,Path,Cost) :-
+    search([[Start,0]], Goal, RevPath, Cost),
+    reverse(RevPath, Path).
+
+% Goal condition
+search([[Goal,G]|_], Goal, [Goal], G).
+
+search([[Node,G]|Rest], Goal, [Node|Path], Cost) :-
+    edge(Node,Next,C),
+    \+ member([Next,_], Rest),
+
+    G1 is G + C,
+    h(Next,H),
+    F is G1 + H,
+
+    insert([[Next,G1]], Rest, NewQueue),
+    search(NewQueue, Goal, Path, Cost).
+
+% Insert into queue
+insert([],Queue,Queue).
+
+insert([H|T],Queue,[H|Queue]).
+Procedure
+Define graph nodes and edge costs.
+Define heuristic values.
+Calculate:
+Path cost
+Heuristic cost
+
+Compute:
+
+f(n)=g(n)+h(n)
+Select node with minimum cost.
+Repeat until goal state is reached.
+Result
+
+A* Search Algorithm was implemented successfully and shortest path was obtained.
+
+How To Execute
+Step 1 — Save File
+
+Save as:
+
+astar.pl
+Step 2 — Open SWI-Prolog
+Step 3 — Load File
+['/Users/anshikasaini/Desktop/astar.pl'].
+
+OR simply:
+
+['astar.pl'].
+
+if file is in same folder.
+
+Step 4 — Run Program
+astar(a,g,Path,Cost).
+Expected Output
+Path = [a,b,d,g]
+Cost = 6
+Important Viva Questions
+What is heuristic function?
+
+Estimated cost from current node to goal node.
+
+Formula of A*?
+
+f(n)=g(n)+h(n)
+
+Difference between Best First Search and A*?
+Best First Search	A*
+Uses heuristic only	Uses path + heuristic
+Not always optimal	Gives optimal path
+Advantage of A*
+Fast
+Optimal
+Efficient path finding
